@@ -27,6 +27,18 @@ public class FrontControllerServletV1 extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
+        System.out.println("FrontControllerServletV1.service");
+
+        // http://localhost:8080/front-controller/v1/members/new-form 에서
+        // /front-controller/v1/members/new-form 을 꺼낼 수 있음
+        String requestURI = req.getRequestURI();
+
+        ControllerV1 controller = controllerV1Map.get(requestURI);
+        if(controller == null){
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        controller.process(req, resp);
     }
 }
